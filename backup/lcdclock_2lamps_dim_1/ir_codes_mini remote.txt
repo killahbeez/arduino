@@ -1,0 +1,8 @@
+ok	FDA857
+up	FD8877
+down	FD9867
+left	FD28D7
+right	FD6897
+#	FD708F
+1	FD00FF
+2	FD807F

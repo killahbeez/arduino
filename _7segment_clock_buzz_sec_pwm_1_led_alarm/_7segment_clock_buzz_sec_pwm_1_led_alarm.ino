@@ -191,16 +191,16 @@ void setup() {
   freq_multiplex = 2000;
 
   TCCR1A |= (1 << WGM10) | (1 << WGM11);
-  TCCR1B = (1 << CS11) | (1 << CS10) | (1 << WGM12) | (1 << WGM13); // Normal port operation, 64 prescaller, Fast PWM OCRA
+  TCCR1B = (1 << CS11) | (1 << CS10) | (1 << WGM12) | (1 << WGM13); // Normal port operation, 64 prescaller, Fast PWM / OCRA (TOP)
   OCR1A = 16000000 / 64 / freq_multiplex;
   TIMSK1 = (1 << TOIE1);
 
   DDRC |= (1 << DS) | (1 << SHCP) | (1 << STCP) | (1 << PC3);
   DDRB |= (1 << PB3); // led toggle seconds OUTPUT
-
+  
   DDRD |= (1 << PD3); // buzzer
-  TCCR2B = (TCCR2B & 0b11111000) | 0b00000010; // set prescaller clk/8 (3.92 kHz)
-
+  TCCR2B = (TCCR2B & 0b11111000) | 0b00000010; // set prescaller clk/8 (3.92 kHz), PWM Phase Correct / 0xFF (TOP)
+  
   DDRD |= (1 << PD0); // UART RX debugger oscilloscope
 
   clock.begin();

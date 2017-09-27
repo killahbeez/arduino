@@ -57,6 +57,15 @@ uint8_t alssa[5] = {
   0b11101110 //A
 };
 
+uint8_t error[5] = {
+  0b10011110, //E
+  0b11101110, //R
+  0b11101110, //R
+  0b11111100, //O
+  0b11101110 //R
+};
+
+
 uint8_t loop_on[6] = {
   0b00011100, //L
   0b11111100, //O
@@ -197,17 +206,23 @@ void setup() {
 
   DDRC |= (1 << DS) | (1 << SHCP) | (1 << STCP) | (1 << PC3);
   DDRB |= (1 << PB3); // led toggle seconds OUTPUT
-  
+
   DDRD |= (1 << PD3); // buzzer
   TCCR2B = (TCCR2B & 0b11111000) | 0b00000010; // set prescaller clk/8 (3.92 kHz), PWM Phase Correct / 0xFF (TOP)
+
+  //check if RTC is ACK on address DS3231_ADDRESS
+  Wire.begin();
+  Wire.beginTransmission(DS3231_ADDRESS);
+  if (Wire.endTransmission() != 0) {
+    Serial.println("Error RTC: Check if present");
+    EEP_VARS.logo = 2; // write ERROR as logo
+  }
+  else {
+    clock.begin();
+    Wire.setClock(400000L); // SCL freq 400kHz, TWBR = 12
+    initialize();
+  }
   
-  DDRD |= (1 << PD0); // UART RX debugger oscilloscope
-
-  clock.begin();
-  Wire.setClock(400000L); // SCL freq 400kHz, TWBR = 12
-
-  initialize();
-
   display_mode = LOGO;
 
   Serial.println(".......................ready");
@@ -865,6 +880,9 @@ void digitsRefresh() {
   ///////// SHOW LOGO
   if (display_mode == LOGO) {
     switch (EEP_VARS.logo) {
+      case 2:
+        showLogo(error, sizeof(error));
+        break;
       case 1:
         showLogo(alssa, sizeof(alssa));
         break;

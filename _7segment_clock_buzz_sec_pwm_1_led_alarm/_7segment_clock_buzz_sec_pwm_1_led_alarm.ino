@@ -805,7 +805,12 @@ void showLogo(uint8_t* logo, uint8_t size) {
       cnt_refresh = 0;
       pos_logo = -1;
       isr_ticker.ms_100 = true;
-      display_mode = CLOCK;
+      if(EEP_VARS.logo == 2){
+        display_mode = LOGO;
+      }
+      else{
+        display_mode = CLOCK;
+      }
     }
   }
 

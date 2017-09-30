@@ -201,7 +201,7 @@ void setup() {
   OCR1A = 16000000 / 64 / freq_multiplex;
   TIMSK1 = (1 << TOIE1);
 
-  DDRC |= (1 << DS) | (1 << SHCP) | (1 << STCP) | (1 << PC3);
+  DDRC |= (1 << DS) | (1 << SHCP) | (1 << STCP);
   DDRB |= (1 << PB3); // led toggle seconds OUTPUT
 
   DDRD |= (1 << PD3); // buzzer
@@ -243,11 +243,9 @@ void initialize() {
     }
 
     if (is_armed) {
-      PORTC |= (1 << PC3);
       Serial.println("init as ARMED");
     }
     else {
-      PORTC &= ~(1 << PC3);
       Serial.println("init as NOT ARMED");
     }
   }
@@ -467,7 +465,6 @@ void loop() {
       clock.armAlarm1(true);
       is_armed = true;
 
-      PORTC |= (1 << PC3);
       EEPROM.write(EEP_ADDR.is_armed, 1);
       Serial.println("armed");
     }
@@ -476,7 +473,6 @@ void loop() {
       clock.armAlarm1(false);
       is_armed = false;
 
-      PORTC &= ~(1 << PC3);
       EEPROM.write(EEP_ADDR.is_armed, 0);
       Serial.println("NOT armed");
     }
@@ -953,7 +949,11 @@ void digitsRefresh() {
 
       setSR_Clock(timp, number_digits);
     }
-
+    
+    if (is_armed && crtDigit == 0) {
+      shiftReg[crtDigit] |= 1;
+    }
+    
     writeDigits(shiftReg[crtDigit], crtDigit);
     crtDigit = (++crtDigit) % number_digits;
   }
@@ -997,9 +997,13 @@ void digitsRefresh() {
 
     crtDigit++;
     if (crtDigit > 6) {
-      crtDigit = 1;
+      crtDigit = 0;
     }
-
+    
+    if (is_armed && crtDigit == 0) {
+      shiftReg[crtDigit] |= 1;
+    }
+    
     writeDigits(shiftReg[crtDigit], crtDigit);
   }
 
@@ -1016,9 +1020,13 @@ void digitsRefresh() {
 
     crtDigit++;
     if (crtDigit > 4) {
-      crtDigit = 1;
+      crtDigit = 0;
     }
-
+    
+    if (is_armed) {
+      shiftReg[0] |= 1;
+    }
+    
     writeDigits(shiftReg[crtDigit], crtDigit);
   }
 
@@ -1052,9 +1060,13 @@ void digitsRefresh() {
 
     crtDigit++;
     if (crtDigit > number_digits) {
-      crtDigit = 1;
+      crtDigit = 0;
     }
-
+    
+    if (is_armed && crtDigit == 0) {
+      shiftReg[crtDigit] |= 1;
+    }
+    
     writeDigits(shiftReg[crtDigit], crtDigit);
   }
 

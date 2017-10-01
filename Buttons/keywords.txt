@@ -1,0 +1,15 @@
+Buttons	KEYWORD1
+read	KEYWORD2
+isPressed	KEYWORD2
+isReleased	KEYWORD2
+isPressedFor	KEYWORD2
+isClicked	KEYWORD2
+Debounce	KEYWORD2
+getPin	KEYWORD2
+
+pressed	KEYWORD2
+released	KEYWORD2
+first_press	KEYWORD2
+isClicked	KEYWORD2
+isClicked	KEYWORD2
+isClicked	KEYWORD2

@@ -63,6 +63,14 @@ void setup() {
   ArduinoOTA.setPassword("dune1234");
   ArduinoOTA.begin();
 
+  pinMode(D3, OUTPUT);
+  digitalWrite(D3,LOW);
+  
+  pixels.begin();
+  pixels.setBrightness(10);
+  pixels.clear();
+  pixels.show();
+  
   // Wait for connection
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -87,15 +95,6 @@ void setup() {
   reconnectGoogleApps();
 
   ticker.attach(10, callback_ticker);
-
-  pinMode(D2, OUTPUT);
-  digitalWrite(D2,HIGH);
-  pinMode(D3, OUTPUT);
-
-  pixels.begin();
-  pixels.setBrightness(10);
-  pixels.clear();
-  pixels.show();
 }
 
 int8_t getMSBpos(uint8_t nr) {
@@ -255,7 +254,8 @@ void loop() {
     delay(20);
     digitalWrite(D3, LOW);
   }
-
+  digitalWrite(D3,LOW);
+  
   if (restart && get_restart_cnt) {
     char buffer[30];
     sprintf(buffer, "%d", ++cnt_restart);

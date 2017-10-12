@@ -236,6 +236,22 @@ void setup(void) {
 
   Serial.println("");
 
+  pinMode(D5, OUTPUT);
+  digitalWrite(D5,LOW);
+  
+  pixels_1.begin();
+  pixels_1.setBrightness(10);
+  pixels_1.clear();
+  pixels_1.show();
+  pixels_2.begin();
+  pixels_2.setBrightness(10);
+  pixels_2.clear();
+  pixels_2.show();
+  pixels_3.begin();
+  pixels_3.setBrightness(10);
+  pixels_3.clear();
+  pixels_3.show();
+  
   // Wait for connection
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -256,21 +272,9 @@ void setup(void) {
   client.setServer(broker, 1883);
   client.setCallback(callback);
 
-  pixels_1.begin();
-  pixels_1.setBrightness(10);
-  pixels_1.clear();
-  pixels_1.show();
-  pixels_2.begin();
-  pixels_2.setBrightness(10);
-  pixels_2.clear();
-  pixels_2.show();
-  pixels_3.begin();
-  pixels_3.setBrightness(10);
-  pixels_3.clear();
-  pixels_3.show();
+
 
   
-  pinMode(D5, OUTPUT);
   ticker.attach(0.01, callback_ticker);
   ticker1.attach(10, callback_ticker_wdt);
 }
@@ -359,6 +363,8 @@ void loop(void) {
     fadeNeopixel(pixels_3, current_state.neopixel_3);
     tick = 0;
   }
+  
+  digitalWrite(D5, LOW);
 }
 
 void fadeNeopixel(Adafruit_NeoPixel& pixels, neopixel_state& neopixel_state) {

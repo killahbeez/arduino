@@ -63,8 +63,8 @@ void setup() {
   ArduinoOTA.setPassword("dune1234");
   ArduinoOTA.begin();
 
-  pinMode(D3, OUTPUT);
-  digitalWrite(D3,LOW);
+  pinMode(D5, OUTPUT);
+  digitalWrite(D5,LOW);
   
   pixels.begin();
   pixels.setBrightness(10);
@@ -250,11 +250,11 @@ void loop() {
 
 
     ///ping watchdog timer
-    digitalWrite(D3, HIGH);
+    digitalWrite(D5, HIGH);
     delay(20);
-    digitalWrite(D3, LOW);
+    digitalWrite(D5, LOW);
   }
-  digitalWrite(D3,LOW);
+  digitalWrite(D5,LOW);
   
   if (restart && get_restart_cnt) {
     char buffer[30];

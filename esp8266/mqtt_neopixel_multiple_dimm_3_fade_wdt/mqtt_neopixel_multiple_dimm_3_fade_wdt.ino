@@ -132,12 +132,15 @@ void callback(char* topic, byte* payload, unsigned int length) {
       getCommand.max = atoi(arr[4]);
 
       if (strcmp(topic, neopixel_1_topic.command) == 0) {
+        Serial.println(getCommand.is_turn);
         setNeopixel(neopixel_1_topic, pixels_1, current_state.neopixel_1, getCommand);
       }
       if (strcmp(topic, neopixel_2_topic.command) == 0) {
+        Serial.println(getCommand.is_turn);
         setNeopixel(neopixel_2_topic, pixels_2, current_state.neopixel_2, getCommand);
       }
       if (strcmp(topic, neopixel_3_topic.command) == 0) {
+        Serial.println(getCommand.is_turn);
         setNeopixel(neopixel_3_topic, pixels_3, current_state.neopixel_3, getCommand);
       }
     }
@@ -155,12 +158,12 @@ void callback(char* topic, byte* payload, unsigned int length) {
       dimNeopixel(neopixel_3_topic, pixels_3, current_state.neopixel_3, (char*)payload);
     }
   }
-  
+
   if (strcmp(topic, topic_restart_cnt) == 0 ) {
     cnt_restart = atoi((char*) payload);
     get_restart_cnt = 1;
   }
-  
+
   ticker.attach(0.01, callback_ticker);
 }
 
@@ -198,6 +201,9 @@ void setNeopixel(Topics neopixelTopic, Adafruit_NeoPixel& pixels, neopixel_state
       pixels.setPixelColor(cnt, color);
     }
   }
+  else{
+    pixels.clear();
+  }
   pixels.show();
 
   neopixel_state.is_turn = getCommand.is_turn;
@@ -225,6 +231,19 @@ hex_colors getRGB(char* RGB) {
   return RGB_colors;
 }
 
+void initialize_pixel(Adafruit_NeoPixel& pixels,uint32_t color) {
+  
+  pixels.begin();
+  pixels.clear();
+  pixels.setBrightness(10);
+  
+  for (uint8_t cnt = 0; cnt < pixels.numPixels(); cnt++) {
+    pixels.setPixelColor(cnt, color);
+  }
+
+  pixels.show();
+}
+
 void setup(void) {
   Serial.begin(115200);
   WiFi.mode(WIFI_STA);
@@ -237,21 +256,12 @@ void setup(void) {
   Serial.println("");
 
   pinMode(D5, OUTPUT);
-  digitalWrite(D5,LOW);
-  
-  pixels_1.begin();
-  pixels_1.setBrightness(10);
-  pixels_1.clear();
-  pixels_1.show();
-  pixels_2.begin();
-  pixels_2.setBrightness(10);
-  pixels_2.clear();
-  pixels_2.show();
-  pixels_3.begin();
-  pixels_3.setBrightness(10);
-  pixels_3.clear();
-  pixels_3.show();
-  
+  digitalWrite(D5, LOW);
+
+  initialize_pixel(pixels_1, 0xff0000);
+  initialize_pixel(pixels_2, 0x00ff00);
+  initialize_pixel(pixels_3, 0x0000ff);
+
   // Wait for connection
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -274,7 +284,7 @@ void setup(void) {
 
 
 
-  
+
   ticker.attach(0.01, callback_ticker);
   ticker1.attach(10, callback_ticker_wdt);
 }
@@ -363,7 +373,7 @@ void loop(void) {
     fadeNeopixel(pixels_3, current_state.neopixel_3);
     tick = 0;
   }
-  
+
   digitalWrite(D5, LOW);
 }
 

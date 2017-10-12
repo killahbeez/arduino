@@ -94,6 +94,7 @@ typedef struct {
   hex_colors RGB;
   uint8_t min;
   uint8_t max;
+  boolean from_setup;
 } neopixel_state;
 
 typedef struct {
@@ -201,7 +202,8 @@ void setNeopixel(Topics neopixelTopic, Adafruit_NeoPixel& pixels, neopixel_state
       pixels.setPixelColor(cnt, color);
     }
   }
-  else{
+  else if(neopixel_state.from_setup){
+    neopixel_state.from_setup = 0;
     pixels.clear();
   }
   pixels.show();
@@ -235,7 +237,7 @@ void initialize_pixel(Adafruit_NeoPixel& pixels,uint32_t color) {
   
   pixels.begin();
   pixels.clear();
-  pixels.setBrightness(10);
+  pixels.setBrightness(5);
   
   for (uint8_t cnt = 0; cnt < pixels.numPixels(); cnt++) {
     pixels.setPixelColor(cnt, color);
@@ -243,6 +245,7 @@ void initialize_pixel(Adafruit_NeoPixel& pixels,uint32_t color) {
 
   pixels.show();
 }
+
 
 void setup(void) {
   Serial.begin(115200);
@@ -257,7 +260,10 @@ void setup(void) {
 
   pinMode(D5, OUTPUT);
   digitalWrite(D5, LOW);
-
+  
+  current_state.neopixel_1.from_setup = 1;
+  current_state.neopixel_2.from_setup = 1;
+  current_state.neopixel_3.from_setup = 1;
   initialize_pixel(pixels_1, 0xff0000);
   initialize_pixel(pixels_2, 0x00ff00);
   initialize_pixel(pixels_3, 0x0000ff);
@@ -281,9 +287,6 @@ void setup(void) {
   /* Prepare MQTT client */
   client.setServer(broker, 1883);
   client.setCallback(callback);
-
-
-
 
   ticker.attach(0.01, callback_ticker);
   ticker1.attach(10, callback_ticker_wdt);

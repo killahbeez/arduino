@@ -13,6 +13,7 @@ volatile boolean start_of_second = 0;
 boolean beep_sec = false;
 boolean set_beep_sec = false;
 uint8_t dim_led_sec = 250;
+boolean decrementLedSec = true;
 
 Buttons button_Clock(8); //PB0
 Buttons button_Temp(7); //PD7
@@ -219,7 +220,7 @@ void setup() {
     Wire.setClock(400000L); // SCL freq 400kHz, TWBR = 12
     initialize();
   }
-  
+
   display_mode = LOGO;
 
   Serial.println(".......................ready");
@@ -251,7 +252,7 @@ void initialize() {
       Serial.println("init as NOT ARMED");
     }
   }
-  
+
   if (EEPROM.read(EEP_ADDR.loop) != 255) {
     loop_data = EEPROM.read(EEP_ADDR.loop);
   }
@@ -802,10 +803,10 @@ void showLogo(uint8_t* logo, uint8_t size) {
       cnt_refresh = 0;
       pos_logo = -1;
       isr_ticker.ms_100 = true;
-      if(EEP_VARS.logo == 2){
+      if (EEP_VARS.logo == 2) {
         display_mode = LOGO;
       }
-      else{
+      else {
         display_mode = CLOCK;
       }
     }
@@ -942,6 +943,7 @@ void digitsRefresh() {
       if (isr_ticker.ms_500_leds_second) {
         if (start_of_second) { // on second change turn on leds
           OCR2A = dim_led_sec;
+          decrementLedSec = true;
         }
         isr_ticker.ms_500_leds_second = false;
       }
@@ -1079,12 +1081,26 @@ void digitsRefresh() {
 }
 
 void pulsateLedSec() {
+  static uint32_t cnt = 0;
   TCCR2A = ( TCCR2A & 0b00111111 ) | 0b10000000;
-  if (OCR2A <= 5) {
-    OCR2A = 0;
+  if (decrementLedSec) {
+    if (OCR2A <= 5) {
+      OCR2A = 0;
+      decrementLedSec = false;
+      cnt = 0;
+    }
+    else {
+      OCR2A -= 5;
+    }
   }
-  else {
-    OCR2A -= 5;
+  // stay with led off for 250ms before increment luminosity (10ms * cnt)
+  if (!decrementLedSec && ++cnt >= 25) {
+    if (OCR2A >= 250) {
+      OCR2A = 250;
+    }
+    else {
+      OCR2A += 10;
+    }
   }
 }
 

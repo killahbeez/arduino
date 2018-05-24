@@ -12,7 +12,7 @@ uint8_t prev_second = 0;
 volatile boolean start_of_second = 0;
 boolean beep_sec = false;
 boolean set_beep_sec = false;
-uint8_t dim_led_sec = 150;
+uint8_t dim_led_sec = 250;
 
 Buttons button_Clock(8); //PB0
 Buttons button_Temp(7); //PD7
@@ -1080,11 +1080,11 @@ void digitsRefresh() {
 
 void pulsateLedSec() {
   TCCR2A = ( TCCR2A & 0b00111111 ) | 0b10000000;
-  if (OCR2A <= 3) {
+  if (OCR2A <= 5) {
     OCR2A = 0;
   }
   else {
-    OCR2A -= 3;
+    OCR2A -= 5;
   }
 }
 

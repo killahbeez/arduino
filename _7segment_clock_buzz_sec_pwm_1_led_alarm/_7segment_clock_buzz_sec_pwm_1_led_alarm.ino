@@ -12,7 +12,7 @@ uint8_t prev_second = 0;
 volatile boolean start_of_second = 0;
 boolean beep_sec = false;
 boolean set_beep_sec = false;
-uint8_t dim_led_sec = 250;
+uint8_t dim_led_sec = 150;
 boolean decrementLedSec = true;
 
 Buttons button_Clock(8); //PB0
@@ -1084,22 +1084,22 @@ void pulsateLedSec() {
   static uint32_t cnt = 0;
   TCCR2A = ( TCCR2A & 0b00111111 ) | 0b10000000;
   if (decrementLedSec) {
-    if (OCR2A <= 5) {
+    if (OCR2A <= 3) {
       OCR2A = 0;
       decrementLedSec = false;
       cnt = 0;
     }
     else {
-      OCR2A -= 5;
+      OCR2A -= 3;
     }
   }
   // stay with led off for 250ms before increment luminosity (10ms * cnt)
   if (!decrementLedSec && ++cnt >= 25) {
-    if (OCR2A >= 250) {
-      OCR2A = 250;
+    if (OCR2A >= 150) {
+      OCR2A = 150;
     }
     else {
-      OCR2A += 10;
+      OCR2A += 6;
     }
   }
 }

@@ -1080,6 +1080,10 @@ void digitsRefresh() {
 
 }
 
+//pulsate led every 1 sec
+//at start of a second decrement intensity from dim_led_sec to zero
+//wait for a while with led off
+//then increment the intensity till dim_led_sec
 void pulsateLedSec() {
   static uint32_t cnt = 0;
   TCCR2A = ( TCCR2A & 0b00111111 ) | 0b10000000;
@@ -1093,10 +1097,10 @@ void pulsateLedSec() {
       OCR2A -= 3;
     }
   }
-  // stay with led off for 250ms before increment luminosity (10ms * cnt)
+  // stay with led off for 250ms before increment intensity (10ms * cnt)
   if (!decrementLedSec && ++cnt >= 25) {
-    if (OCR2A >= 150) {
-      OCR2A = 150;
+    if (OCR2A >= dim_led_sec) {
+      OCR2A = dim_led_sec;
     }
     else {
       OCR2A += 6;

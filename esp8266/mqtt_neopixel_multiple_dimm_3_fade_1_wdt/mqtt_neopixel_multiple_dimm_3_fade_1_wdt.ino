@@ -19,11 +19,8 @@ Adafruit_NeoPixel pixels_3 = Adafruit_NeoPixel(40, D3, NEO_GRB + NEO_KHZ800);
 
 Adafruit_NeoPixel pixels[3] = {pixels_1, pixels_2, pixels_3};
 
-const char* ssid = "UPC3165272";
-const char* password = "DAGKFDCC";
-
-const char* www_username = "adi";
-const char* www_password = "dune1234";
+const char* ssid = "UPCD476AA2";
+const char* password = "Fr4vebAeepuk";
 
 IPAddress ip(192, 168, 0, 14);
 IPAddress gateway(192, 168, 0, 1);
@@ -310,7 +307,7 @@ void setup(void) {
   pinMode(D5, OUTPUT);
   ticker.attach(0.01, callback_ticker);
   ticker1.attach(10, callback_ticker_wdt);
-  sliderNeopixel();
+  //sliderNeopixel();
 }
 
 boolean tick = 0;

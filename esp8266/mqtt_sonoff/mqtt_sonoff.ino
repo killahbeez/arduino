@@ -5,11 +5,8 @@
 #include <PubSubClient.h>
 #include <explode.h>
 
-const char* ssid = "UPC3165272";
-const char* password = "DAGKFDCC";
-
-const char* www_username = "adi";
-const char* www_password = "dune1234";
+const char* ssid = "UPCD476AA2";
+const char* password = "Fr4vebAeepuk";
 
 IPAddress ip(192, 168, 0, 15);
 IPAddress gateway(192, 168, 0, 1);

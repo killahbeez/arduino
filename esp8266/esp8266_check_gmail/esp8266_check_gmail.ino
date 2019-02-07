@@ -12,8 +12,8 @@
 Ticker ticker;
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(8, D2, NEO_GRB + NEO_KHZ800);
 
-const char* ssid = "UPC3165272";
-const char* password = "DAGKFDCC";
+const char* ssid = "UPCD476AA2";
+const char* password = "Fr4vebAeepuk";
 
 IPAddress ip(192, 168, 0, 13);
 IPAddress gateway(192, 168, 0, 1);
@@ -34,7 +34,10 @@ const int httpsPort = 443;
 
 // echo | openssl s_client -connect script.google.com:443 |& openssl x509 -fingerprint -noout
 // SHA1 fingerprint of the certificate
-const char* fingerprint = "FD 8C AC 55 64 BE 30 57 9A 27 53 52 62 E1 CD 26 82 15 A2 DB";
+//SHA1 Fingerprint=DA:5C:50:06:98:6D:61:3F:C5:D0:0E:C6:68:AE:CD:D3:86:B0:D5:6B
+
+//const char* fingerprint = "FD 8C AC 55 64 BE 30 57 9A 27 53 52 62 E1 CD 26 82 15 A2 DB";
+const char* fingerprint = "DA:5C:50:06:98:6D:61:3F:C5:D0:0E:C6:68:AE:CD:D3:86:B0:D5:6B";
 
 HTTPSRedirect clientAppsGoogle(httpsPort);
 

@@ -17,8 +17,8 @@ Adafruit_NeoPixel pixels_1 = Adafruit_NeoPixel(68, D1, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixels_2 = Adafruit_NeoPixel(26, D2, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixels_3 = Adafruit_NeoPixel(40, D3, NEO_GRB + NEO_KHZ800);
 
-const char* ssid = "UPC3165272";
-const char* password = "DAGKFDCC";
+const char* ssid = "UPCD476AA2";
+const char* password = "Fr4vebAeepuk";
 
 const char* www_username = "adi";
 const char* www_password = "dune1234";
